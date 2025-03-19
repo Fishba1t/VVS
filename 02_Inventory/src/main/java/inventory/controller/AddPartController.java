@@ -2,6 +2,7 @@ package inventory.controller;
 
 import inventory.model.Part;
 import inventory.service.InventoryService;
+import inventory.validator.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -138,40 +139,48 @@ public class AddPartController implements Initializable, Controller {
      * @throws IOException
      */
     @FXML
-    void handleAddPartSave(ActionEvent event) throws IOException {
+    void handleAddPartSave(ActionEvent event) {
         String name = nameTxt.getText();
         String price = priceTxt.getText();
         String inStock = inventoryTxt.getText();
         String min = minTxt.getText();
         String max = maxTxt.getText();
         String partDynamicValue = addPartDynamicTxt.getText();
-        errorMessage = "";
-        
+
         try {
-            errorMessage = Part.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
-            if(errorMessage.length() > 0) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error Adding Part!");
-                alert.setHeaderText("Error!");
-                alert.setContentText(errorMessage);
-                alert.showAndWait();
+
+            double parsedPrice = Double.parseDouble(price);
+            int parsedStock = Integer.parseInt(inStock);
+            int parsedMin = Integer.parseInt(min);
+            int parsedMax = Integer.parseInt(max);
+
+
+            if (isOutsourced) {
+                service.addOutsourcePart(name, parsedPrice, parsedStock, parsedMin, parsedMax, partDynamicValue);
             } else {
-               if(isOutsourced == true) {
-                    service.addOutsourcePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
-                } else {
-                    service.addInhousePart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
-                }
-                displayScene(event, "/fxml/MainScreen.fxml");
+                service.addInhousePart(name, parsedPrice, parsedStock, parsedMin, parsedMax, Integer.parseInt(partDynamicValue));
             }
-            
-        } catch (NumberFormatException e) {
-            System.out.println("Form contains blank field.");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+            displayScene(event, "/fxml/MainScreen.fxml");
+
+        } catch (ValidationException ve) {
+            // Show validation errors in an alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Adding Part!");
-            alert.setHeaderText("Error!");
-            alert.setContentText("Form contains blank field.");
+            alert.setHeaderText("Validation Error");
+            alert.setContentText(ve.getMessage());
             alert.showAndWait();
+        } catch (NumberFormatException e) {
+            // Handle incorrect input formats
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Adding Part!");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("Please enter valid numerical values.");
+            alert.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
 }

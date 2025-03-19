@@ -4,6 +4,7 @@ import inventory.exceptions.IsValidProductException;
 import inventory.model.Part;
 import inventory.model.Product;
 import inventory.service.InventoryService;
+import inventory.validator.ValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -202,28 +203,28 @@ public class AddProductController implements Initializable, Controller {
         String inStock = inventoryTxt.getText();
         String min = minTxt.getText();
         String max = maxTxt.getText();
-        errorMessage = "";
 
         try {
-            service.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
             service.addProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
-            displayScene(event, "/fxml/MainScreen.fxml");
+            displayScene(event, "/fxml/MainScreen.fxml"); // Dacă produsul este valid, trece la următoarea scenă.
         } catch (NumberFormatException e) {
-            System.out.println("Form contains blank field.");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error Adding Product!");
-            alert.setHeaderText("Error!");
-            alert.setContentText("Form contains blank field.");
-            alert.showAndWait();
-        }
-        catch (IsValidProductException ex){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error Adding Part!");
-            alert.setHeaderText("Error!");
-            alert.setContentText(errorMessage);
-            alert.showAndWait();
+            showErrorMessage("Error Adding Product!", "Form contains blank or invalid fields.");
+        } catch (ValidationException ex) {  // Prindem excepția validatorului
+            showErrorMessage("Validation Error", ex.getMessage());
         }
     }
+
+    /**
+     * Afișează o alertă cu un mesaj de eroare.
+     */
+    private void showErrorMessage(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText("Error!");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     /**
      * Gets search text and inputs into lookupAssociatedPart method to highlight desired part

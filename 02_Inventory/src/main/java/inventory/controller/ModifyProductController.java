@@ -230,7 +230,7 @@ public class ModifyProductController implements Initializable, Controller {
         errorMessage = "";
 
         try {
-            service.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
+            //service.isValidProduct(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts, errorMessage);
             service.updateProduct(productIndex, productId, name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), addParts);
             displayScene(event, "/fxml/MainScreen.fxml");
         } catch (NumberFormatException e) {
@@ -241,13 +241,13 @@ public class ModifyProductController implements Initializable, Controller {
             alert.setContentText("Form contains blank field.");
             alert.showAndWait();
         }
-        catch (IsValidProductException ex){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error Adding Part!");
-            alert.setHeaderText("Error!");
-            alert.setContentText(errorMessage);
-            alert.showAndWait();
-        }
+//        catch (IsValidProductException ex){
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Error Adding Part!");
+//            alert.setHeaderText("Error!");
+//            alert.setContentText(errorMessage);
+//            alert.showAndWait();
+//        }
     }
 
     /**

@@ -3,6 +3,8 @@ package inventory;
 import inventory.repository.InventoryRepository;
 import inventory.service.InventoryService;
 import inventory.controller.MainScreenController;
+import inventory.validator.PartValidator;
+import inventory.validator.ProductValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +16,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         InventoryRepository repo= new InventoryRepository();
-        InventoryService service = new InventoryService(repo);
+        PartValidator partValidator = new PartValidator();
+        ProductValidator productValidator = new ProductValidator();
+        InventoryService service = new InventoryService(repo, partValidator, productValidator);
         System.out.println(service.getAllProducts());
         System.out.println(service.getAllParts());
         FXMLLoader loader= new FXMLLoader(getClass().getResource("/fxml/MainScreen.fxml"));
