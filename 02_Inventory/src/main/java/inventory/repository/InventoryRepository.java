@@ -1,5 +1,6 @@
 package inventory.repository;
 
+
 import inventory.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ public class InventoryRepository {
 
 	private static String filename = "data/items.txt";
 	private Inventory inventory;
+
 	public InventoryRepository(){
 		this.inventory=new Inventory();
 		readParts();

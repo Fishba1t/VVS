@@ -174,6 +174,16 @@ public class ModifyPartController implements Initializable, Controller {
      */
     @FXML
     void handleModifyPartSave(ActionEvent event) throws IOException {
+        int selectedIndex = getModifyPartIndex();
+
+        if (selectedIndex < 0 || selectedIndex >= service.getAllParts().size()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Part Selected");
+            alert.setHeaderText("Selection Required");
+            alert.setContentText("Please select a part before modifying.");
+            alert.showAndWait();
+            return;
+        }
         String partId = partIdTxt.getText();
         String name = nameTxt.getText();
         String price = priceTxt.getText();
@@ -182,24 +192,23 @@ public class ModifyPartController implements Initializable, Controller {
         String max = maxTxt.getText();
         String partDynamicValue = modifyPartDynamicTxt.getText();
         errorMessage = "";
-        
+
         try {
             //errorMessage = Part.isValidPart(name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), errorMessage);
-            if(errorMessage.length() > 0) {
+            if (errorMessage.length() > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error Adding Part!");
                 alert.setHeaderText("Error!");
                 alert.setContentText(errorMessage);
                 alert.showAndWait();
             } else {
-                if(isOutsourced == true) {
+                if (isOutsourced) {
                     service.updateOutsourcedPart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), partDynamicValue);
                 } else {
                     service.updateInhousePart(partIndex, Integer.parseInt(partId), name, Double.parseDouble(price), Integer.parseInt(inStock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partDynamicValue));
                 }
                 displayScene(event, "/fxml/MainScreen.fxml");
             }
-
         } catch (NumberFormatException e) {
             System.out.println("Blank Fields");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -208,7 +217,7 @@ public class ModifyPartController implements Initializable, Controller {
             alert.setContentText("Form contains blank field.");
             alert.showAndWait();
         }
-
     }
+
 
 }

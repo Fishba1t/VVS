@@ -3,44 +3,28 @@ package inventory.service;
 import inventory.exceptions.IsValidProductException;
 import inventory.model.*;
 import inventory.repository.InventoryRepository;
-import inventory.validator.PartValidator;
-import inventory.validator.ProductValidator;
-import inventory.validator.ValidationException;
+import inventory.repository.InventoryRepositoryFile;
 import javafx.collections.ObservableList;
 
 public class InventoryService {
 
-    private InventoryRepository repo;
-    private PartValidator partValidator;
-
-    private ProductValidator productValidator;
-    public InventoryService(InventoryRepository repo, PartValidator partValidator, ProductValidator productValidator) {
-        this.repo = repo;
-        this.partValidator = partValidator;
-        this.productValidator = productValidator;
+    private InventoryRepositoryFile repo;
+    public InventoryService(InventoryRepositoryFile repo){
+        this.repo =repo;
     }
 
-    public void addInhousePart(String name, double price, int inStock, int min, int max, int partDynamicValue) throws ValidationException {
-        // 1. Create a part object
+    public Part addInhousePart(String name, double price, int inStock, int min, int  max, int partDynamicValue){
         InhousePart inhousePart = new InhousePart(repo.getAutoPartId(), name, price, inStock, min, max, partDynamicValue);
-
-        // 2. Validate before saving
-        partValidator.validate(inhousePart);
-
-        // 3. Save if valid
-        repo.addPart(inhousePart);
+        return repo.addPart(inhousePart);
     }
-    public void addOutsourcePart(String name, double price, int inStock, int min, int max, String partDynamicValue) throws ValidationException {
+
+    public void addOutsourcePart(String name, double price, int inStock, int min, int  max, String partDynamicValue){
         OutsourcedPart outsourcedPart = new OutsourcedPart(repo.getAutoPartId(), name, price, inStock, min, max, partDynamicValue);
-
-        partValidator.validate(outsourcedPart);
-
         repo.addPart(outsourcedPart);
     }
 
     public void addProduct(String name, double price, int inStock, int min, int  max, ObservableList<Part> addParts){
         Product product = new Product(repo.getAutoProductId(), name, price, inStock, min, max, addParts);
-        productValidator.validate(product);
         repo.addProduct(product);
     }
 
@@ -60,32 +44,18 @@ public class InventoryService {
         return repo.lookupProduct(search);
     }
 
-    public void updateInhousePart(int partIndex, int partId, String name, double price, int inStock, int min, int max, int partDynamicValue) throws ValidationException {
-        // 1. Create the part object
+    public void updateInhousePart(int partIndex, int partId, String name, double price, int inStock, int min, int max, int partDynamicValue){
         InhousePart inhousePart = new InhousePart(partId, name, price, inStock, min, max, partDynamicValue);
-
-        // 2. Validate before updating
-        partValidator.validate(inhousePart);
-
-        // 3. Update if valid
         repo.updatePart(partIndex, inhousePart);
     }
 
-    public void updateOutsourcedPart(int partIndex, int partId, String name, double price, int inStock, int min, int max, String partDynamicValue) throws ValidationException {
-        // 1. Create the part object
+    public void updateOutsourcedPart(int partIndex, int partId, String name, double price, int inStock, int min, int max, String partDynamicValue){
         OutsourcedPart outsourcedPart = new OutsourcedPart(partId, name, price, inStock, min, max, partDynamicValue);
-
-        // 2. Validate before updating
-        partValidator.validate(outsourcedPart);
-
-        // 3. Update if valid
         repo.updatePart(partIndex, outsourcedPart);
     }
 
-
     public void updateProduct(int productIndex, int productId, String name, double price, int inStock, int min, int max, ObservableList<Part> addParts){
         Product product = new Product(productId, name, price, inStock, min, max, addParts);
-        productValidator.validate(product);
         repo.updateProduct(productIndex, product);
     }
 
@@ -95,6 +65,39 @@ public class InventoryService {
 
     public void deleteProduct(Product product){
         repo.deleteProduct(product);
+    }
+
+    /**
+     * Generate an error message for invalid values in a part
+     * Valid part will return an empty string
+     * @param name
+     * @param price
+     * @param inStock
+     * @param min
+     * @param max
+     * @param errorMessage
+     * @return
+     */
+    public static String isValidPart(String name, double price, int inStock, int min, int max, String errorMessage) {
+        if(name.equals("")) {
+            errorMessage += "A name has not been entered. ";
+        }
+        if(price < 0.01) {
+            errorMessage += "The price must be greater than 0. ";
+        }
+        if(inStock < 1) {
+            errorMessage += "Inventory level must be greater than 0. ";
+        }
+        if(min > max) {
+            errorMessage += "The Min value must be less than the Max value. ";
+        }
+        if(inStock < min) {
+            errorMessage += "Inventory level is lower than minimum value. ";
+        }
+        if(inStock > max) {
+            errorMessage += "Inventory level is higher than the maximum value. ";
+        }
+        return errorMessage;
     }
 
     /**
@@ -142,4 +145,5 @@ public class InventoryService {
         }
         throw new IsValidProductException(errorMessage);
     }
+
 }
