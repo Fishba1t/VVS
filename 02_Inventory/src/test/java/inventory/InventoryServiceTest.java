@@ -42,6 +42,7 @@ public class InventoryServiceTest {
             part.setPartId(part_service.getPartId());
 
             //assert
+            System.out.println(part.getPartId());
             assert(part_service.equals(part));
         } catch (ValidationException err) {
             assert (false);
@@ -60,6 +61,7 @@ public class InventoryServiceTest {
             part.setPartId(part_service.getPartId());
 
             //assert
+            System.out.println(part.getPartId());
             assert(part_service.equals(part));
         } catch (ValidationException err) {
             assert (false);
