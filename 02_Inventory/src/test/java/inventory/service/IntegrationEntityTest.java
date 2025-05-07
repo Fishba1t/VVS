@@ -2,6 +2,7 @@ package inventory.service;
 
 import inventory.model.InhousePart;
 import inventory.model.Part;
+import inventory.model.Product;
 import inventory.repository.InventoryRepositoryFile;
 import inventory.validator.PartValidator;
 import inventory.validator.ProductValidator;
@@ -61,23 +62,23 @@ public class IntegrationEntityTest {
         assertEquals(expectedMessage, actualMessage);
     }
 
-    // Test JUnit - verifica daca produsul adaugat poate fi gasit
-//    @Test
-//    void lookupProduct_validData() {
-//        try {
-//            //setup
-//            service.addInhousePart("a", 20, 10, 3, 20, 5);
-//            Product product = new Product(0, "foarfeca", 50000, 50, 2, 10, service.getAllParts());
-//
-//            //act
-//            service.addProduct("foarfeca", 50000, 50, 2, 100, service.getAllParts());
-//
-//            //assert
-//            Product product1 = service.lookupProduct("foarfeca");
-//            assert(product1.getName().equals(product.getName()));
-//        } catch (ValidationException err) {
-//            System.out.println(err.getMessage());
-//            assert (false);
-//        }
-//    }
+     //Test JUnit - verifica daca produsul adaugat poate fi gasit
+    @Test
+    void lookupProduct_validData() {
+        try {
+            //setup
+            service.addInhousePart("a", 20, 10, 3, 20, 5);
+            Product product = new Product(0, "foarfeca", 50000, 50, 2, 10, service.getAllParts());
+
+            //act
+            service.addProduct("foarfeca", 50000, 50, 2, 100, service.getAllParts());
+
+            //assert
+            Product product1 = service.lookupProduct("foarfeca");
+            assert(product1.getName().equals(product.getName()));
+        } catch (ValidationException err) {
+            System.out.println(err.getMessage());
+            assert (false);
+        }
+    }
 }
