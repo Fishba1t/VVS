@@ -1,4 +1,4 @@
-package inventory;
+package inventory.service;
 
 import inventory.model.Product;
 import org.junit.jupiter.api.BeforeEach;

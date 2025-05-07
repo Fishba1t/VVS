@@ -1,9 +1,8 @@
-package inventory;
+package inventory.service;
 
 import inventory.model.Part;
 import inventory.model.Product;
 import inventory.repository.InventoryRepositoryFile;
-import inventory.service.InventoryService;
 import javafx.collections.FXCollections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

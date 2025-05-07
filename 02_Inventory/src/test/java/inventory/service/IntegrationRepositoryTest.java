@@ -1,8 +1,7 @@
-package inventory;
+package inventory.service;
 
 import inventory.model.Product;
 import inventory.repository.InventoryRepositoryFile;
-import inventory.service.InventoryService;
 import inventory.validator.PartValidator;
 import inventory.validator.ProductValidator;
 import org.junit.jupiter.api.BeforeEach;

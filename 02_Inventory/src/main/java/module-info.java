@@ -11,4 +11,5 @@ module inventory {
     exports inventory.controller;
     exports inventory.repository;
     exports inventory.validator;
+    opens inventory.service;
 }

@@ -1,4 +1,4 @@
-package inventory;
+package inventory.service;
 
 import inventory.model.InhousePart;
 import inventory.model.Product;
