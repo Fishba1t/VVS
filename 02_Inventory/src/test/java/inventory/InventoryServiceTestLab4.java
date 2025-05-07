@@ -1,4 +1,4 @@
-package mockLab4Tests;
+package inventory;
 
 import inventory.model.Part;
 import inventory.model.Product;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 
 // Test pentru S (service)
 // Test de integrare – Step 2 (S cu R mock-uit)
-public class InventoryServiceTest {
+public class InventoryServiceTestLab4 {
     InventoryService service;
     InventoryRepositoryFile repo;
 

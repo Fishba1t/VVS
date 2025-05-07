@@ -1,4 +1,4 @@
-package mockLab4Tests;
+package inventory;
 
 import inventory.model.Product;
 import inventory.repository.InventoryRepositoryFile;

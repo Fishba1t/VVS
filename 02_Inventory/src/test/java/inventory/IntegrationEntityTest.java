@@ -1,8 +1,7 @@
-package mockLab4Tests;
+package inventory;
 
 import inventory.model.InhousePart;
 import inventory.model.Part;
-import inventory.model.Product;
 import inventory.repository.InventoryRepositoryFile;
 import inventory.service.InventoryService;
 import inventory.validator.PartValidator;
@@ -11,9 +10,6 @@ import inventory.validator.ValidationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static inventory.validator.PartValidator.minErrMsg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
