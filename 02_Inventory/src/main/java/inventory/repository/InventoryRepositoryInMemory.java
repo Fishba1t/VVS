@@ -43,31 +43,20 @@ public class InventoryRepositoryInMemory {
      * @return
      */
     public Product lookupProduct(String searchNameOrId) {
-        // Daca se cauta cu un nume/ID gol, return null
-        if (searchNameOrId.equals("")) {
+        if(searchNameOrId.equals("")){
             return null;
         }
         boolean isFound = false;
-
-        for (Product p : products) {
-            // Daca produsul corespunde cu numele sau ID-ul cautat, il returnam
-            if (p.getName().contains(searchNameOrId) || (p.getProductId() + "").equals(searchNameOrId)) {
-                return p;
-            }
-            // Marcam ca am intrat in for, deci lista nu e goala
+        for(Product p: products) {
+            if(p.getName().contains(searchNameOrId) || (p.getProductId()+"").equals(searchNameOrId)) return p;
             isFound = true;
         }
-
-        // Daca nu am intrat deloc in for (lista goala), returnam produsul "default"
-        if (isFound == false) {
+        if(isFound == false) {
             Product product = new Product(0, null, 0.0, 0, 0, 0, null);
             return product;
         }
-
-        // Daca lista nu e goala, dar nu s-a gasit produsul cautat, returnam null.
         return null;
     }
-
 
     /**
      * Update product at given index

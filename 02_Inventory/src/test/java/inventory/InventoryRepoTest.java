@@ -16,13 +16,11 @@ public class InventoryRepoTest {
         repository = new InventoryRepositoryInMemory();
     }
 
-    //string gol care trebuie sa intoarca null
     @Test
     void lookupProduct_F02_WBT_1() {
         assertNull(repository.lookupProduct(""));
     }
 
-    //adaugare de produse si cautare produs dupa nume
     @Test
     void lookupProduct_F02_WBT_2() {
         repository.addProduct(new Product(1, "masina", 22000.59, 1, 3, 4));
@@ -37,7 +35,6 @@ public class InventoryRepoTest {
         assertEquals(productFound, repository.lookupProduct("masina"));
     }
 
-    //adaugare produse si caut unul care nu exista care trebuie sa intoarca null
     @Test
     void lookupProduct_F02_WBT_3() {
         repository.addProduct(new Product(1, "masina", 22000.59, 1, 3, 4));
@@ -45,7 +42,6 @@ public class InventoryRepoTest {
         assertNull(repository.lookupProduct("telefon"));
     }
 
-    //cautare produs care nu e in lista (lista e goala) care trebuie sa intoarca produs default
     @Test
     void lookupProduct_F02_WBT_4() {
         assertEquals(new Product(0, null, 0.0, 0, 0, 0, null),
